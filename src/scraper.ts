@@ -21,7 +21,7 @@ export async function scrapeUrl(seedUrl: string, options?: CrawlOptions): Promis
         return [htmlContent];
     } catch (error) {
         console.log('Error crawling URL:', error);
-        return [];
+        throw error;
     } finally {
         await page.close();
         await context.close();

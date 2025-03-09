@@ -11,10 +11,7 @@ export async function extractor(html: string, url?: string): Promise<ExtractedCo
     return await extractor.extract(url, html);
   } catch (error: any) {
     console.error(`Error extracting content: ${error}`);
-    return {
-      title: 'Extraction failed',
-      paragraphs: [`Error extracting content: ${error.message}`],
-      images: []
-    };
+    throw error;
+    
   }
 }

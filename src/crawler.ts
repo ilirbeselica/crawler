@@ -5,6 +5,7 @@ export async function crawlUrl(seedUrl: string, options?: CrawlOptions): Promise
     const browser = await getBrowser();
     const context = await browser.newContext();
     const page = await context.newPage();
+    console.log(options)
 
     try {
         console.log(`Crawling URL: ${seedUrl} ...`);
@@ -18,12 +19,28 @@ export async function crawlUrl(seedUrl: string, options?: CrawlOptions): Promise
                 .filter(href => regex ? regex.test(href) : true);
         }, options?.regexFilter);
         
-        const uniqueUrls = Array.from(new Set(urls));
-        console.log(`Found ${uniqueUrls.length} URLs on ${seedUrl}`);
+        // Filter out invalid URLs and ensure all values are strings
+        const validUrls = urls
+            .filter(url => typeof url === 'string' && url.trim() !== '')
+            .filter(url => {
+                try {
+                    // Validate URL format
+                    new URL(url);
+                    
+                    // Optionally filter by protocol (keep only http/https)
+                    return url.startsWith('http://') || url.startsWith('https://');
+                } catch (e) {
+                    console.warn(`Skipping invalid URL: ${url}`);
+                    return false;
+                }
+            });
+        
+        const uniqueUrls = Array.from(new Set(validUrls));
+        console.log(`Found ${uniqueUrls.length} valid unique URLs on ${seedUrl}`);
         return uniqueUrls;
     } catch (error) {
         console.log('Error crawling URL:', error);
-        return [];
+        throw error;
     } finally {
         await page.close();
         await context.close();

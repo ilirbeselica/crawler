@@ -1,0 +1,30 @@
+{
+  "name": "basic-crawler",
+  "version": "1.0.0",
+  "description": "A basic crawler using Node.js, TypeScript, BullMQ and Playwright",
+  "main": "dist/app.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "dev": "ts-node src/app.ts",
+    "worker": "ts-node src/worker.ts"
+  },
+  "dependencies": {
+    "@openrouter/ai-sdk-provider": "^0.4.3",
+    "@types/express": "^5.0.0",
+    "ai": "^4.1.54",
+    "axios": "^1.8.2",
+    "bullmq": "^1.70.0",
+    "cheerio": "^1.0.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.18.2",
+    "ioredis": "^5.3.2",
+    "json-schema": "^0.4.0",
+    "playwright": "^1.32.0"
+  },
+  "devDependencies": {
+    "@types/json-schema": "^7.0.15",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
+  }
+}

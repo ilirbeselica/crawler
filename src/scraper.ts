@@ -14,10 +14,21 @@ export async function scrapeUrl(seedUrl: string, options?: CrawlOptions): Promis
         const bodySelector = options?.bodySelector || 'body';
         console.log(`Waiting for selector: ${bodySelector}`);
         // extract content inside the bodySelector
-        const htmlContent = await page.$eval(bodySelector, (el: Element) => el.innerHTML);
-        // save to file
-        const fs = require('fs');
-        fs.writeFileSync('./scraped.html', htmlContent);
+        // use page.evaluate, get title from the page and add it sinde bodySelector
+        await page.evaluate((bodySelector) => {
+            const title = document.querySelector('title')?.innerText || '';
+            const body = document.querySelector(bodySelector);
+            if (body) {
+                const titleElement = document.createElement('title');
+                titleElement.innerText = title;
+                body.prepend(titleElement);
+            }
+        }, bodySelector)
+
+        let htmlContent = await page.$eval(bodySelector, (el: Element) => el.innerHTML);
+        
+
+
         return [htmlContent];
     } catch (error) {
         console.log('Error crawling URL:', error);

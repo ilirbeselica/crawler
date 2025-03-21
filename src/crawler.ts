@@ -1,5 +1,5 @@
 import { CrawlOptions } from './interfaces';
-import { getBrowser } from './browserInstance.';
+import { getBrowser } from './browserInstance';
 
 export async function crawlUrl(seedUrl: string, options?: CrawlOptions): Promise<string[]> {
     const browser = await getBrowser();

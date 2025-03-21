@@ -1,5 +1,5 @@
 import { CrawlOptions } from './interfaces';
-import { getBrowser } from './browserInstance.';
+import { getBrowser } from './browserInstance';
 
 export async function scrapeUrl(seedUrl: string, options?: CrawlOptions): Promise<string[]> {
     const browser = await getBrowser();
@@ -9,7 +9,7 @@ export async function scrapeUrl(seedUrl: string, options?: CrawlOptions): Promis
     try {
         console.log(`Crawling URL: ${seedUrl} ...`);
         await page.goto(seedUrl, { waitUntil: "domcontentloaded", timeout: 60000 });
-        await page.waitForSelector(options!.waitSelector, { timeout: options!.timeout, state: 'attached' });
+        await page.waitForSelector(options!.bodySelector, { timeout: options!.timeout, state: 'attached' });
         await page.waitForTimeout(3000);
         const bodySelector = options?.bodySelector || 'body';
         console.log(`Waiting for selector: ${bodySelector}`);

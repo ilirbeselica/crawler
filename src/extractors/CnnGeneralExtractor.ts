@@ -1,14 +1,15 @@
 import { ExtractedContent } from './interfaces';
 import { BaseExtractor } from './BaseExtractor';
 
-export class CnnHealthExtractor extends BaseExtractor {
+export class CnnGeneralExtractor extends BaseExtractor {
 
     canExtract(url: string): boolean {
-        const cnnHealthRegex = /https?:\/\/(www\.)?cnn\.com\/health/;
+        const cnnHealthRegex = /https:\/\/edition\.cnn\.com\/\d{4}\/\d{2}\/\d{2}\/.*\/index\.html/;
         return cnnHealthRegex.test(url);
     }
 
     async extract(url: string, html: string): Promise<ExtractedContent> {
+        console.log('Extracting content from CNN Health URL:', url);
         const $ = this.parseHtml(html);
         const result: ExtractedContent = {
             title: '',
@@ -16,13 +17,11 @@ export class CnnHealthExtractor extends BaseExtractor {
             images: []
         };
 
-        // check if (title element exists)
         const titleElement = $('title').text();
         console.log('Title element:', titleElement);
         if (titleElement) result.title = this.cleanText(titleElement);
         if (! result.title) result.title = this.cleanText($('h1.headline__text').text());
 
-        // Extract paragraphs
         $('.paragraph').each((i, el) => {
             const text = $(el).text().trim();
             if (text && !text.startsWith('Related article')) {
@@ -30,17 +29,18 @@ export class CnnHealthExtractor extends BaseExtractor {
             }
         });
 
-        // Extract all images (including main and related content)
         $('img.image__dam-img').each((i, el) => {
-            const imgUrl = $(el).attr('src') || '';
+            let imgUrl = $(el).attr('src') || '';
+            const questionMarkIndex = imgUrl.indexOf('?');
+            if (questionMarkIndex !== -1) {
+                imgUrl = imgUrl.substring(0, questionMarkIndex);
+            }
 
-            // Skip duplicates (by URL) and empty URLs
             if (imgUrl && !result.images!.includes(imgUrl)) {
                 result.images!.push(imgUrl);
             }
         });
 
-        // Extract author
         const authorText = $('.source__text').text().trim();
         if (authorText) {
             result.author = authorText;

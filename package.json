@@ -3,12 +3,15 @@
   "version": "1.0.0",
   "description": "A basic crawler using Node.js, TypeScript, BullMQ and Playwright",
   "main": "dist/app.js",
-  "scripts": {
-    "build": "tsc",
-    "start": "node dist/app.js",
-    "dev": "ts-node src/app.ts",
-    "worker": "ts-node src/worker.ts"
-  },
+ "scripts": {
+  "build": "tsc",
+  "start": "node dist/app.js",
+  "dev": "ts-node src/app.ts",
+  "xvfb": "./scripts/xvfb-run.sh",
+  "worker": "ts-node src/worker.ts",
+  "worker:display": "DISPLAY=:99 ts-node src/worker.ts",
+  "worker:full": "./scripts/xvfb-run.sh && DISPLAY=:99 ts-node src/worker.ts"
+},
   "dependencies": {
     "@openrouter/ai-sdk-provider": "^0.4.3",
     "@types/express": "^5.0.0",

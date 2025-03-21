@@ -20,9 +20,8 @@ const crawlQueue = new Queue<CrawlJobData>('crawlQueue', { connection });
 const rewriteQueue = new Queue<RewriteJobData>('rewriteQueue', { connection });
 
 app.post('/crawl', async (req: AuthRequest, res: any) => {
-  const jobId = uuidv4();
-  console.log(req.body)
-  const { url, options } = req.body;
+  console.log(req.body);
+  const { url, options, jobId = uuidv4() } = req.body;
   if (!url) {
     console.error('Missing required url parameter');
     return res.status(400).json({ error: 'Missing required url parameter' });
@@ -39,9 +38,8 @@ app.post('/crawl', async (req: AuthRequest, res: any) => {
 });
 
 app.post('/scrape', async (req: AuthRequest, res: any) => {
-  const jobId = uuidv4();
-  console.log(req.body)
-  const { url, options } = req.body;
+  console.log(req.body);
+  const { url, options, jobId = uuidv4() } = req.body;
   if (!url) {
     console.error('Missing required url parameter');
     return res.status(400).json({ error: 'Missing required url parameter' });
@@ -58,8 +56,7 @@ app.post('/scrape', async (req: AuthRequest, res: any) => {
 });
 
 app.post('/extract', async (req: AuthRequest, res: any) => {
-  const jobId = uuidv4();
-  const { url, html } = req.body;
+  const { url, html, jobId = uuidv4() } = req.body;
   
   if (!html) {
     console.error('Missing required html parameter');
@@ -88,14 +85,13 @@ app.post('/extract', async (req: AuthRequest, res: any) => {
 });
 
 app.post('/rewrite-text', async (req: AuthRequest, res: any) => {
-  const jobId = uuidv4();
-  const { text, url, model, apiKey } = req.body;
+  const { text, url, model, apiKey, jobId = uuidv4() } = req.body;
   if (!text) {
     console.error('Missing required text parameter');
     return res.status(400).json({ error: 'Missing required text parameter' });
   }
 
-  if (! url) {
+  if (!url) {
     console.error('Missing required url parameter');
     return res.status(400).json({ error: 'Missing required url parameter' });
   }
@@ -111,15 +107,14 @@ app.post('/rewrite-text', async (req: AuthRequest, res: any) => {
 });
 
 app.post('/translate', async (req: AuthRequest, res: any) => {
-  const jobId = uuidv4();
-  const { url, text, targetLang, sourceLang } = req.body;
+  const { url, text, targetLang, sourceLang, jobId = uuidv4() } = req.body;
   if (!text) return res.status(400).json({ error: 'Missing required text parameter' });
   if (!url) return res.status(400).json({ error: 'Missing required url parameter' });
   if (!targetLang) return res.status(400).json({ error: 'Missing required targetLang parameter' });
   if (!sourceLang) return res.status(400).json({ error: 'Missing required sourceLang parameter' });
 
   try {
-    const job = await rewriteQueue.add('translateText', { url, text, targetLang, sourceLang }, { jobId});
+    const job = await rewriteQueue.add('translateText', { url, text, targetLang, sourceLang }, { jobId });
     console.log(`Added job to queue: ${job.id}`);
     res.json({ jobId: job.id });
   } catch (error) {
@@ -128,7 +123,7 @@ app.post('/translate', async (req: AuthRequest, res: any) => {
   }
 })
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`API server listening on port ${PORT}`);
 });

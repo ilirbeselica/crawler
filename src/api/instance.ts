@@ -47,7 +47,7 @@ const createApiClient = (baseURL: string, token?: string): AxiosInstance => {
 
 // Create API clients for different services
 export const dashboardApi = createApiClient(
-  process.env.DASHBOARD_API_URL || 'http://localhost:8000',
+  process.env.DASHBOARD_API_URL || 'http://localhost',
   process.env.DASHBOARD_API_TOKEN
 );
 

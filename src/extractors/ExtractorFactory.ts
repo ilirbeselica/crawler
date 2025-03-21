@@ -1,9 +1,11 @@
 import { ContentExtractor } from './interfaces';
-import { CnnHealthExtractor } from './CnnHealthExtractor';
+import { CnnGeneralExtractor } from './CnnGeneralExtractor';
+import { ApGeneralExtractor } from './ApGeneralExtractor';
 
 export class ExtractorFactory {
   private static extractors: ContentExtractor[] = [
-    new CnnHealthExtractor(),
+    new CnnGeneralExtractor(),
+    new ApGeneralExtractor(),
     // Add more extractors as you create them
   ];
   
@@ -19,7 +21,6 @@ export class ExtractorFactory {
       }
     }
     
-    // This should never happen as GenericExtractor accepts all URLs
-    return this.extractors[this.extractors.length - 1];
+    throw new Error(`No extractor found for URL: ${url}`);
   }
 }

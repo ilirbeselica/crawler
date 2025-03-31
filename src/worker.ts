@@ -31,7 +31,7 @@ const cralwWorker = new Worker<CrawlJobData>(
           if (Array.isArray(result)) {
             result = result[0];
           }
-          const parsedData = await extractor(result, job.data.url);
+          const parsedData = await extractor(result, job.data.url, job.data.options);
           console.log(parsedData)
           await saveScrapedArticle(job.data.url, parsedData);
           break;

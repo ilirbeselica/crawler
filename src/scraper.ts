@@ -10,7 +10,7 @@ export async function scrapeUrl(seedUrl: string, options?: CrawlOptions): Promis
         console.log(`Crawling URL: ${seedUrl} ...`);
         await page.goto(seedUrl, { waitUntil: "domcontentloaded", timeout: 60000 });
         await page.waitForSelector(options!.bodySelector, { timeout: options!.timeout, state: 'attached' });
-        await page.waitForTimeout(3000);
+        await page.waitForTimeout(5000);
         const bodySelector = options?.bodySelector || 'body';
         console.log(`Waiting for selector: ${bodySelector}`);
         // extract content inside the bodySelector

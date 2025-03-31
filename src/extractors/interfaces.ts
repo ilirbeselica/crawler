@@ -7,5 +7,5 @@ export interface ExtractedContent {
 
 export interface ContentExtractor {
     canExtract(url: string): boolean;
-    extract(url: string, html: string): Promise<ExtractedContent>;
+    extract(url: string, html: string, options?: any): Promise<ExtractedContent>;
 }

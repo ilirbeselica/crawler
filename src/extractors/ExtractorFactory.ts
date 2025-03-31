@@ -1,11 +1,13 @@
 import { ContentExtractor } from './interfaces';
 import { CnnGeneralExtractor } from './CnnGeneralExtractor';
 import { ApGeneralExtractor } from './ApGeneralExtractor';
+import { GeneralExtractor } from './GeneralExtractor';
 
 export class ExtractorFactory {
   private static extractors: ContentExtractor[] = [
     new CnnGeneralExtractor(),
     new ApGeneralExtractor(),
+    new GeneralExtractor
     // Add more extractors as you create them
   ];
   

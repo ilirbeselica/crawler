@@ -1,18 +1,28 @@
 module.exports = {
-    apps: [
-      {
-        name: "xvfb",
-        script: "Xvfb",
-        args: ":99 -screen 0 1024x768x24",
-        autorestart: true
-      },
-      {
-        name: "crawler-app",
-        script: "dist/app.js", 
-        env: {
-          DISPLAY: ":99",
-          NODE_ENV: "production"
-        }
+  apps: [
+    {
+      name: "crawler-app",
+      script: "npm",
+      args: "start",
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      max_memory_restart: "1G",
+      env: {
+        NODE_ENV: "production",
+        PORT: 3001
       }
-    ]
-  };
+    },
+    {
+      name: "crawler-worker",
+      script: "npm",
+      args: "run worker:full",
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      env: {
+        NODE_ENV: "production"
+      }
+    }
+  ]
+};

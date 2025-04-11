@@ -1,4 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import https from 'https';
+
 import * as dotenv from 'dotenv';
 
 // Load environment variables
@@ -10,7 +12,10 @@ const createApiClient = (baseURL: string, token?: string): AxiosInstance => {
     baseURL,
     headers: {
       'Content-Type': 'application/json',
-    }
+    },
+    httpsAgent: new https.Agent({ 
+      rejectUnauthorized: false 
+    })
   };
   
   if (token) {
@@ -47,7 +52,7 @@ const createApiClient = (baseURL: string, token?: string): AxiosInstance => {
 
 // Create API clients for different services
 export const dashboardApi = createApiClient(
-  process.env.DASHBOARD_API_URL || 'http://localhost',
+  process.env.DASHBOARD_API_URL || 'https://localhost',
   process.env.DASHBOARD_API_TOKEN
 );
 
